@@ -9,7 +9,6 @@ public class VkTest extends Hooks {
         VkProfile vkProfile = new VkProfile();
         vkProfile.getProfileInfo();
 //        vkProfile.setProfileInfo(vkProfile.findEmptyProfileInfo(), "api test");
-        vkProfile.getPhotoUploadServer();
-        vkProfile.uploadPhotoOnServer();
+        vkProfile.saveUploadedPhoto();
     }
 }

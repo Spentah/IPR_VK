@@ -77,7 +77,7 @@ public class VkProfile {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
                 .when()
                 .contentType("multipart/form-data")
-                .multiPart(new File("src/main/resources/ava.jpg"))
+                .multiPart(new File("src/main/resources/fish.jpg"))
                 .post(getPhotoUploadServer());
         response.then().statusCode(200);
         return JsonPath.from(response.asString()).getMap("$");
@@ -89,10 +89,10 @@ public class VkProfile {
                 .param("photo", uploadPhotoOnServer().get("photo"))
                 .param("hash", uploadPhotoOnServer().get("hash"))
                 .when()
-                .post("photos.saveOwnerPhoto");
+                .get("photos.saveOwnerPhoto");
         response.then().statusCode(200);
-        JsonPath.from(response.asString());
-
+        if (JsonPath.from(response.asString()).getInt("response.saved") != 1)
+            logger.error("Фото не сохранено");
     }
 
 }
