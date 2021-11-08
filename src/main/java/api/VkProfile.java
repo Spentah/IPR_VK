@@ -6,13 +6,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.testng.log4testng.Logger;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
+import java.util.*;
 
 import static io.restassured.RestAssured.given;
 
 public class VkProfile {
+    private final Logger logger = Logger.getLogger(VkProfile.class);
     private VkResponse vkResponse;
 
     public void getProfileInfo() {
@@ -26,7 +28,6 @@ public class VkProfile {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        JsonPath.from("").getMap("$.response");
     }
 
     public void setProfileInfo(String field, String value) {
@@ -35,10 +36,9 @@ public class VkProfile {
                 .when()
                 .get("account.saveProfileInfo");
         response.then().statusCode(200);
-
     }
 
-    public void findEmptyProfileInfo() {
+    public String findEmptyProfileInfo() {
         Map<String, String> profileFields = new HashMap<>();
         profileFields.put("first_name", vkResponse.getResponse().getFirstName());
         profileFields.put("last_name", vkResponse.getResponse().getFirstName());
@@ -49,13 +49,50 @@ public class VkProfile {
         profileFields.put("country_id", vkResponse.getResponse().getCountry().getId() + "");
         profileFields.put("city_id", vkResponse.getResponse().getCity().getId() + "");
 
-        if (profileFields.containsValue("")) {
-            for (Map.Entry<String, String> entry : profileFields.entrySet()) {
-                if (entry.getValue().isEmpty()) {
-
-                }
+        List<String> emptyFields = new ArrayList<>();
+        for (Map.Entry<String, String> pair : profileFields.entrySet()) {
+            if (pair.getValue().equals("")) {
+                logger.info("Нашлось незаполненное поле - " + pair.getKey());
+                emptyFields.add(pair.getKey());
             }
         }
 
+        if (!emptyFields.isEmpty()) {
+            String result = emptyFields.get(0);
+            emptyFields.remove(0);
+            return result;
+        }
+        return "";
     }
+
+    public String getPhotoUploadServer() {
+        Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
+                .param("owner_id", vkResponse.getResponse().getId())
+                .get("photos.getOwnerPhotoUploadServer");
+        response.then().statusCode(200);
+        return JsonPath.from(response.asString()).getString("response.upload_url");
+    }
+
+    public Map<String, String> uploadPhotoOnServer() {
+        Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
+                .when()
+                .contentType("multipart/form-data")
+                .multiPart(new File("src/main/resources/ava.jpg"))
+                .post(getPhotoUploadServer());
+        response.then().statusCode(200);
+        return JsonPath.from(response.asString()).getMap("$");
+    }
+
+    public void saveUploadedPhoto() {
+        Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
+                .param("server", uploadPhotoOnServer().get("server"))
+                .param("photo", uploadPhotoOnServer().get("photo"))
+                .param("hash", uploadPhotoOnServer().get("hash"))
+                .when()
+                .post("photos.saveOwnerPhoto");
+        response.then().statusCode(200);
+        JsonPath.from(response.asString());
+
+    }
+
 }
