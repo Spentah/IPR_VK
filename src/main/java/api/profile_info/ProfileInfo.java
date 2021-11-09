@@ -1,6 +1,6 @@
 package api.profile_info;
 
-public class VkResponse {
+public class ProfileInfo {
     private Response response;
 
     public Response getResponse() {

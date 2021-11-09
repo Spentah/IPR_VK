@@ -1,7 +1,8 @@
 package api;
 
-import api.profile_info.VkResponse;
+import api.profile_info.ProfileInfo;
 import api.utils.RequestSpecUtil;
+import api.utils.VkUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.restassured.path.json.JsonPath;
@@ -15,16 +16,21 @@ import static io.restassured.RestAssured.given;
 
 public class VkProfile {
     private final Logger logger = Logger.getLogger(VkProfile.class);
-    private VkResponse vkResponse;
+    private ProfileInfo profileInfo;
+
+    public ProfileInfo getVkResponse() {
+        return profileInfo;
+    }
 
     public void getProfileInfo() {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
                 .when()
-                .get("account.getProfileInfo");
+                .get(EndPoints.GET_PROFILE_INFO.endPoint);
         response.then().statusCode(200);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            vkResponse = mapper.readValue(response.getBody().asString(), VkResponse.class);
+            profileInfo = mapper.readValue(response.getBody().asString(), ProfileInfo.class);
+            VkUtils.setCurrentProfile(profileInfo);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -34,25 +40,24 @@ public class VkProfile {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
                 .param(field, value)
                 .when()
-                .get("account.saveProfileInfo");
+                .get(EndPoints.SAVE_PROFILE_INFO.endPoint);
         response.then().statusCode(200);
     }
 
     public String findEmptyProfileInfo() {
         Map<String, String> profileFields = new HashMap<>();
-        profileFields.put("first_name", vkResponse.getResponse().getFirstName());
-        profileFields.put("last_name", vkResponse.getResponse().getFirstName());
-        profileFields.put("bdate", vkResponse.getResponse().getBdate());
-        profileFields.put("screen_name", vkResponse.getResponse().getScreenName());
-        profileFields.put("status", vkResponse.getResponse().getStatus());
-        profileFields.put("home_town", vkResponse.getResponse().getHomeTown());
-        profileFields.put("country_id", vkResponse.getResponse().getCountry().getId() + "");
-        profileFields.put("city_id", vkResponse.getResponse().getCity().getId() + "");
+        profileFields.put("first_name", profileInfo.getResponse().getFirstName());
+        profileFields.put("last_name", profileInfo.getResponse().getFirstName());
+        profileFields.put("bdate", profileInfo.getResponse().getBdate());
+        profileFields.put("screen_name", profileInfo.getResponse().getScreenName());
+        profileFields.put("status", profileInfo.getResponse().getStatus());
+        profileFields.put("home_town", profileInfo.getResponse().getHomeTown());
+        profileFields.put("country_id", profileInfo.getResponse().getCountry().getId() + "");
+        profileFields.put("city_id", profileInfo.getResponse().getCity().getId() + "");
 
         List<String> emptyFields = new ArrayList<>();
         for (Map.Entry<String, String> pair : profileFields.entrySet()) {
             if (pair.getValue().equals("")) {
-                logger.info("Нашлось незаполненное поле - " + pair.getKey());
                 emptyFields.add(pair.getKey());
             }
         }
@@ -67,8 +72,8 @@ public class VkProfile {
 
     public String getPhotoUploadServer() {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param("owner_id", vkResponse.getResponse().getId())
-                .get("photos.getOwnerPhotoUploadServer");
+                .param("owner_id", profileInfo.getResponse().getId())
+                .get(EndPoints.GET_PHOTO_UPLOAD_SERVER.endPoint);
         response.then().statusCode(200);
         return JsonPath.from(response.asString()).getString("response.upload_url");
     }
@@ -89,10 +94,12 @@ public class VkProfile {
                 .param("photo", uploadPhotoOnServer().get("photo"))
                 .param("hash", uploadPhotoOnServer().get("hash"))
                 .when()
-                .get("photos.saveOwnerPhoto");
+                .get(EndPoints.SAVE_PHOTO_ON_SERVER.endPoint);
         response.then().statusCode(200);
         if (JsonPath.from(response.asString()).getInt("response.saved") != 1)
             logger.error("Фото не сохранено");
     }
+
+
 
 }
