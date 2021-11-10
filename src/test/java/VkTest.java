@@ -10,9 +10,10 @@ public class VkTest extends Hooks {
         vkApi.getProfileInfo()
 //                .saveProfileInfo()
 //                .saveUploadPhoto()
-                .checkAvaibleType()
-                .uploadDoc("Омар Хайям")
-                .renameDoc("test-doc123")
-                .deleteDocument();
+//                .checkAvaibleType()
+//                .uploadDoc("Омар Хайям")
+//                .renameDoc("test-doc123")
+//                .deleteDocument()
+                .getNewsFeed();
     }
 }
