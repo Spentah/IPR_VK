@@ -1,45 +1,62 @@
 package api;
 
 import api.utils.VkUtils;
+import io.qameta.allure.Step;
 
 public class VkApi {
 
-    private VkProfile vkProfile = new VkProfile();
-    private VkDocument vkDocument = new VkDocument();
+    private VkProfile profile = new VkProfile();
+    private VkDocument document = new VkDocument();
+    private VkNewsFeed newsFeed = new VkNewsFeed();
 
+    @Step("Получаем информацию о профиле")
     public VkApi getProfileInfo() {
-        vkProfile.getProfileInfo();
+        profile.getProfileInfo();
         return this;
     }
 
+    @Step("Заполняем незаполненные поля в профиле")
     public VkApi saveProfileInfo() {
-        vkProfile.setProfileInfo(vkProfile.findEmptyProfileInfo(), "api test");
+        profile.setProfileInfo(profile.findEmptyProfileInfo(), "api test");
         return this;
     }
 
+    @Step("Загружаем фото профиля")
     public VkApi saveUploadPhoto() {
-        vkProfile.saveUploadedPhoto();
+        profile.saveUploadedPhoto();
         return this;
     }
 
+    @Step("Удостоверяемся, что можно загружать документы")
     public VkApi checkAvaibleType() {
-        vkDocument.getDocumentType(VkUtils.getCurrentOwnerId());
+        document.getDocumentType(VkUtils.getCurrentOwnerId());
         return this;
     }
 
+    @Step("Загружаем текстовый документ с именем '{documentName}'")
     public VkApi uploadDoc(String documentName) {
-        vkDocument.saveDocument(documentName);
+        document.saveDocument(documentName);
         return this;
     }
 
+    @Step("Переименовываем загруженный документ именем '{newName}'")
     public VkApi renameDoc(String newName) {
-        vkDocument.renameDocument(newName);
+        document.renameDocument(newName);
         return this;
     }
 
+    @Step("Удаляем документ")
     public VkApi deleteDocument() {
-        vkDocument.deleteDoc();
+        document.deleteDoc();
         return this;
     }
+
+    @Step("Переходим в рекомендации")
+    public VkApi getNewsFeed() {
+        newsFeed.getRecommendedFeed();
+        return this;
+    }
+
+
 
 }

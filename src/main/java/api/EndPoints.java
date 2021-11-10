@@ -11,7 +11,8 @@ public enum EndPoints {
     SAVE_DOCUMENT("docs.save"),
     GET_DOC_ID("docs.get"),
     EDIT_DOCUMENT("docs.edit"),
-    DELETE_DOC("docs.delete");
+    DELETE_DOC("docs.delete"),
+    GET_NEWSFEED("newsfeed.getRecommended");
 
     public final String endPoint;
 
