@@ -27,8 +27,8 @@ public class VkApi {
         return this;
     }
 
-    public VkApi uploadDoc() {
-        vkDocument.saveDocument("Омар Хайям");
+    public VkApi uploadDoc(String documentName) {
+        vkDocument.saveDocument(documentName);
         return this;
     }
 
@@ -41,4 +41,5 @@ public class VkApi {
         vkDocument.deleteDoc();
         return this;
     }
+
 }

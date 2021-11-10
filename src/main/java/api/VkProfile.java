@@ -18,10 +18,6 @@ public class VkProfile {
     private final Logger logger = Logger.getLogger(VkProfile.class);
     private ProfileInfo profileInfo;
 
-    public ProfileInfo getVkResponse() {
-        return profileInfo;
-    }
-
     public void getProfileInfo() {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
                 .when()

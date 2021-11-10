@@ -11,7 +11,7 @@ public class VkTest extends Hooks {
 //                .saveProfileInfo()
 //                .saveUploadPhoto()
                 .checkAvaibleType()
-                .uploadDoc()
+                .uploadDoc("Омар Хайям")
                 .renameDoc("test-doc123")
                 .deleteDocument();
     }
