@@ -9,7 +9,9 @@ public enum EndPoints {
     GET_DOCUMENT_TYPES("docs.getTypes"),
     GET_DOCS_UPLOAD_SERVER("docs.getUploadServer"),
     SAVE_DOCUMENT("docs.save"),
-    GET_DOC_ID("docs.get");
+    GET_DOC_ID("docs.get"),
+    EDIT_DOCUMENT("docs.edit"),
+    DELETE_DOC("docs.delete");
 
     public final String endPoint;
 

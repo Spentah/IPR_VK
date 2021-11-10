@@ -1,5 +1,7 @@
 package api;
 
+import api.utils.VkUtils;
+
 public class VkApi {
 
     private VkProfile vkProfile = new VkProfile();
@@ -21,7 +23,7 @@ public class VkApi {
     }
 
     public VkApi checkAvaibleType() {
-        vkDocument.getDocumentType(vkProfile.getVkResponse().getResponse().getId());
+        vkDocument.getDocumentType(VkUtils.getCurrentOwnerId());
         return this;
     }
 
@@ -30,8 +32,13 @@ public class VkApi {
         return this;
     }
 
-    public VkApi renameAndDeleteDoc(String documentName) {
-        vkDocument.getDocIdByName(documentName);
+    public VkApi renameDoc(String newName) {
+        vkDocument.renameDocument(newName);
+        return this;
+    }
+
+    public VkApi deleteDocument() {
+        vkDocument.deleteDoc();
         return this;
     }
 }

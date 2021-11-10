@@ -5,12 +5,16 @@ import api.utils.VkUtils;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.Assert;
+import org.testng.log4testng.Logger;
 
 import java.io.File;
 
 import static io.restassured.RestAssured.given;
 
 public class VkDocument {
+
+    Logger logger = Logger.getLogger(VkDocument.class);
+    private int docId;
 
     public void getDocumentType(int owner_id) {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
@@ -46,13 +50,32 @@ public class VkDocument {
         response.then().statusCode(200);
     }
 
-    public int getDocIdByName(String documentName) {
+    public int getDocId() {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
                 .param("type", 1)
                 .param("owner_id", VkUtils.getCurrentOwnerId())
                 .get(EndPoints.GET_DOC_ID.endPoint);
         response.then().statusCode(200);
-        int documentId = JsonPath.from(response.asString()).getInt("response.items.find{it.title == '" + documentName + "'}.id");
-        return documentId;
+        docId = JsonPath.from(response.asString()).getInt("response.items.find{it.title == 'Омар Хайям'}.id");
+        return docId;
+    }
+
+    public void renameDocument(String newName) {
+        Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
+                .param("owner_id", VkUtils.getCurrentOwnerId())
+                .param("doc_id", getDocId())
+                .param("title", newName)
+                .get(EndPoints.EDIT_DOCUMENT.endPoint);
+        response.then().statusCode(200);
+        if (JsonPath.from(response.asString()).getInt("response") != 1)
+            logger.error("Изменение документа не произошло! Сервер вернул ответ с ошибкой");
+    }
+
+    public void deleteDoc() {
+        Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
+                .param("owner_id", VkUtils.getCurrentOwnerId())
+                .param("doc_id", docId)
+                .get(EndPoints.DELETE_DOC.endPoint);
+        response.then().statusCode(200);
     }
 }
