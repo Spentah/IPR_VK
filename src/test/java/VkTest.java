@@ -14,6 +14,7 @@ public class VkTest extends Hooks {
 //                .uploadDoc("Омар Хайям")
 //                .renameDoc("test-doc123")
 //                .deleteDocument()
-                .getNewsFeed();
+//                .getNewsFeed()
+                .likePost();
     }
 }
