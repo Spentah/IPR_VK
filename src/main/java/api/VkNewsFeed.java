@@ -4,7 +4,6 @@ import api.utils.RequestSpecUtil;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,39 +12,24 @@ import static io.restassured.RestAssured.given;
 
 public class VkNewsFeed {
 
-    private List<String> list = new ArrayList<>();
+    private Response recommendedFeed;
     private Map<String, List<Object>> ids = new HashMap<>();
 
     public void getRecommendedFeed() {
-        Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
+        recommendedFeed = given().spec(RequestSpecUtil.getSpecification()).log().all()
                 .param("count", 10)
                 .get(EndPoints.GET_NEWSFEED.endPoint);
-        response.then().statusCode(200);
-//        String postId = JsonPath.from(response.asString()).getInt("response.items[4].post_id") +"";
-//        String sourceId = JsonPath.from(response.asString()).getInt("response.items[4].source_id") + "";
-//        String postType = JsonPath.from(response.asString()).getString("response.items[4].post_type");
-//        String ownerId = JsonPath.from(response.asString()).getInt("response.items[4].attachments[0].photo.owner_id") + "";
-//        list.add(postId);
-//        list.add(sourceId);
-//        list.add(postType);
-        getIds(response);
-//        return Arrays.asList(postId, sourceId, postType);
+        recommendedFeed.then().statusCode(200);
+        getIds(recommendedFeed);
     }
 
-    public void like(int number) {
-        int itemId = 1001;
-        int owner = -322371;
-        String type = "post";
-        List<Integer> ownerId = (List<Integer>) ids.get("owner_id").get(number - 1);
-
+    public void like(int postNumber) {
+        List<Integer> ownerId = (List<Integer>) ids.get("owner_id").get(postNumber - 1);
+        Integer itemId = (Integer) ids.get("item_id").get(postNumber - 1);
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-//                .params(getRecommendedFeed())
-                  .param("type", ids.get("type").get(number - 1).toString())
+                  .param("type", ids.get("type").get(postNumber - 1).toString())
                   .param("owner_id", ownerId.get(0))
-                  .param("item_id", ids.get("item_id").get(number - 1))
-//                .param("type", "post")
-//                .param("owner_id", -140880848)
-//                .param("item_id", list.get(0))
+                  .param("item_id", itemId)
                 .get(EndPoints.ADD_LIKE.endPoint);
         response.then().statusCode(200);
     }
@@ -57,10 +41,9 @@ public class VkNewsFeed {
         ids.put("item_id", postIds);
         ids.put("type", postTypes);
         ids.put("owner_id", ownerIds);
-//        Map<String, List<Object>> ids = new HashMap<>();
-//        ids.put("post_id", postIds.get(number - 1));
-//        ids.put("type", postTypes.get(number - 1));
-//        ids.put("owner_id", ownerIds.get(number - 1));
-//        return ids;
+    }
+
+    public void getIdsFromRec(Response response, int number) {
+
     }
 }

@@ -16,9 +16,9 @@ public class VkDocument {
     Logger logger = Logger.getLogger(VkDocument.class);
     private int docId;
 
-    public void getDocumentType(int owner_id) {
+    public void getDocumentType() {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param("owner_id", owner_id)
+                .param("owner_id", VkUtils.getCurrentOwnerId())
                 .get(EndPoints.GET_DOCUMENT_TYPES.endPoint);
         response.then().statusCode(200);
 

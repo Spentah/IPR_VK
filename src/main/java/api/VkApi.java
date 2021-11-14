@@ -1,6 +1,5 @@
 package api;
 
-import api.utils.VkUtils;
 import io.qameta.allure.Step;
 
 public class VkApi {
@@ -29,7 +28,7 @@ public class VkApi {
 
     @Step("Удостоверяемся, что можно загружать документы")
     public VkApi checkAvaibleType() {
-        document.getDocumentType(VkUtils.getCurrentOwnerId());
+        document.getDocumentType();
         return this;
     }
 
@@ -57,6 +56,7 @@ public class VkApi {
         return this;
     }
 
+    @Step("Ставим лайк на пост под номер '{number}' в рекомендациях")
     public VkApi likePost(int number) {
         newsFeed.like(number);
         return this;
