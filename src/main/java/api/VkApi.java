@@ -57,8 +57,8 @@ public class VkApi {
         return this;
     }
 
-    public VkApi likePost() {
-        newsFeed.like();
+    public VkApi likePost(int number) {
+        newsFeed.like(number);
         return this;
     }
 

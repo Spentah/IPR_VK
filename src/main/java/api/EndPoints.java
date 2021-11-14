@@ -12,7 +12,8 @@ public enum EndPoints {
     GET_DOC_ID("docs.get"),
     EDIT_DOCUMENT("docs.edit"),
     DELETE_DOC("docs.delete"),
-    GET_NEWSFEED("newsfeed.getRecommended");
+    GET_NEWSFEED("newsfeed.getRecommended"),
+    ADD_LIKE("likes.add");
 
     public final String endPoint;
 
