@@ -14,22 +14,25 @@ public class VkNewsFeed {
 
     private Response recommendedFeed;
     private Map<String, List<Object>> ids = new HashMap<>();
+    private Map<String, Integer> idsFromRec = new HashMap<>();
 
     public void getRecommendedFeed() {
         recommendedFeed = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param("count", 10)
+//                .param("count", 10)
                 .get(EndPoints.GET_NEWSFEED.endPoint);
         recommendedFeed.then().statusCode(200);
-        getIds(recommendedFeed);
+//        getIds(recommendedFeed);
     }
 
     public void like(int postNumber) {
-        List<Integer> ownerId = (List<Integer>) ids.get("owner_id").get(postNumber - 1);
-        Integer itemId = (Integer) ids.get("item_id").get(postNumber - 1);
+//        List<Integer> ownerId = (List<Integer>) ids.get("owner_id").get(postNumber - 1);
+//        Integer itemId = (Integer) ids.get("item_id").get(postNumber - 1);
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                  .param("type", ids.get("type").get(postNumber - 1).toString())
-                  .param("owner_id", ownerId.get(0))
-                  .param("item_id", itemId)
+                  .param("type", "post")
+                  .params(getIdsFromRec(recommendedFeed, postNumber))
+//                  .param("type", ids.get("type").get(postNumber - 1).toString())
+//                  .param("owner_id", ownerId.get(0))
+//                  .param("item_id", itemId)
                 .get(EndPoints.ADD_LIKE.endPoint);
         response.then().statusCode(200);
     }
@@ -43,7 +46,12 @@ public class VkNewsFeed {
         ids.put("owner_id", ownerIds);
     }
 
-    public void getIdsFromRec(Response response, int number) {
-
+    public Map<String, Integer> getIdsFromRec(Response response, int number) {
+        int itemId = JsonPath.from(response.asString()).getInt("response.items.post_id[" + number + "]");
+        Integer ownerId = (Integer) JsonPath.from(response.asString()).getInt("response.items.attachments[" + number + "].photo.owner_id");
+        Map<String, Integer> i = new HashMap<>();
+        i.put("item_id", itemId);
+        i.put("owner_id", ownerId);
+        return i;
     }
 }
