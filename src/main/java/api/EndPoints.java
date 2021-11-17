@@ -13,7 +13,11 @@ public enum EndPoints {
     EDIT_DOCUMENT("docs.edit"),
     DELETE_DOC("docs.delete"),
     GET_NEWSFEED("newsfeed.getRecommended"),
-    ADD_LIKE("likes.add");
+    ADD_LIKE("likes.add"),
+    BAN_ACCOUNT("account.ban"),
+    ADD_TO_FAVORITE("fave.addPost"),
+    CREATE_GROUP("groups.create"),
+    CREATE_TOPIC("board.addTopic");
 
     public final String endPoint;
 

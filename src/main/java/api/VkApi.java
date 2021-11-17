@@ -7,6 +7,7 @@ public class VkApi {
     private VkProfile profile = new VkProfile();
     private VkDocument document = new VkDocument();
     private VkNewsFeed newsFeed = new VkNewsFeed();
+    private VkGroup group = new VkGroup();
 
     @Step("Получаем информацию о профиле")
     public VkApi getProfileInfo() {
@@ -62,6 +63,28 @@ public class VkApi {
         return this;
     }
 
+    @Step("Баним аккаунт под номером '{number}'")
+    public VkApi banAccount(int number) {
+        newsFeed.ban(number);
+        return this;
+    }
 
+    @Step("Добавляем запись под номер '{number}' в закладки")
+    public VkApi addToFav(int number) {
+        newsFeed.addToFavorite(number);
+        return this;
+    }
+
+    @Step("Создаем группу с названием '{title}'")
+    public VkApi createGroup(String title) {
+        group.createGroup(title);
+        return this;
+    }
+
+    @Step("Создаем обсуждение с названием '{title}'")
+    public VkApi createTopic(String title) {
+        group.createTopic(title);
+        return this;
+    }
 
 }

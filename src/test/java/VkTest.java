@@ -15,6 +15,10 @@ public class VkTest extends Hooks {
 //                .renameDoc("test-doc123")
 //                .deleteDocument()
                 .getNewsFeed()
-                .likePost(5);
+//                .likePost(5)
+//                .banAccount(6)
+//                .addToFav(2)
+                .createGroup("API")
+                .createTopic("New topic");
     }
 }
