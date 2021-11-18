@@ -81,9 +81,37 @@ public class VkApi {
         return this;
     }
 
-    @Step("Создаем обсуждение с названием '{title}'")
-    public VkApi createTopic(String title) {
-        group.createTopic(title);
+    @Step("Создаем обсуждение с названием '{title}' и первым сообщением '{text}'")
+    public VkApi createTopic(String title, String text) {
+        group.createTopic(title, text);
+        return this;
+    }
+
+    public VkApi leaveGroup() {
+        group.leaveGroup();
+        return this;
+    }
+
+    @Step("Закрепляем топик")
+    public VkApi fixTopic() {
+        group.fixTopic();
+        return this;
+    }
+
+    @Step("Создаем коммент с текстом '{text}'")
+    public VkApi createComment(String text) {
+        group.createComment(text);
+        return this;
+    }
+
+    @Step("Редактируем комментарий номер '{commentNum}', новый текст коммента - '{newText}'")
+    public VkApi editComment(int commentNum, String newText) {
+        group.editComment(commentNum, newText);
+        return this;
+    }
+
+    public VkApi deleteComment(int commentNum) {
+        group.deleteComment(commentNum);
         return this;
     }
 

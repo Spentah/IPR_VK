@@ -17,7 +17,12 @@ public enum EndPoints {
     BAN_ACCOUNT("account.ban"),
     ADD_TO_FAVORITE("fave.addPost"),
     CREATE_GROUP("groups.create"),
-    CREATE_TOPIC("board.addTopic");
+    CREATE_TOPIC("board.addTopic"),
+    LEAVE_GROUP("groups.leave"),
+    FIX_TOPIC("board.fixTopic"),
+    CREATE_COMMENT("board.createComment"),
+    EDIT_COMMENT("board.editComment"),
+    DELETE_COMMENT("board.deleteComment");
 
     public final String endPoint;
 
