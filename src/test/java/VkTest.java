@@ -27,6 +27,8 @@ public class VkTest extends Hooks {
 //                .createComment("чебурек")
 //                .editComment(2, "или не лол")
 //                .deleteComment(1)
-                .leaveGroup();
+//                .leaveGroup()
+                .createAlbum("java")
+                .uploadPhoto("src/main/resources/fish.jpg");
     }
 }

@@ -22,7 +22,10 @@ public enum EndPoints {
     FIX_TOPIC("board.fixTopic"),
     CREATE_COMMENT("board.createComment"),
     EDIT_COMMENT("board.editComment"),
-    DELETE_COMMENT("board.deleteComment");
+    DELETE_COMMENT("board.deleteComment"),
+    CREATE_ALBUM("photos.createAlbum"),
+    PHOTO_GET_UPLOAD_SERVER("photos.getUploadServer"),
+    SAVE_PHOTO("photos.save");
 
     public final String endPoint;
 

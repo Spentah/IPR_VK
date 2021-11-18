@@ -8,6 +8,7 @@ public class VkApi {
     private VkDocument document = new VkDocument();
     private VkNewsFeed newsFeed = new VkNewsFeed();
     private VkGroup group = new VkGroup();
+    private VkPhoto photo = new VkPhoto();
 
     @Step("Получаем информацию о профиле")
     public VkApi getProfileInfo() {
@@ -110,8 +111,20 @@ public class VkApi {
         return this;
     }
 
+    @Step("Удаляем коммент под номером '{commentNum}'")
     public VkApi deleteComment(int commentNum) {
         group.deleteComment(commentNum);
+        return this;
+    }
+
+    @Step("Создаем приватный альбом с названием '{title}'")
+    public VkApi createAlbum(String title) {
+        photo.createAlbum(title);
+        return this;
+    }
+
+    public VkApi uploadPhoto(String filePath) {
+        photo.saveUploadedPhoto(filePath);
         return this;
     }
 

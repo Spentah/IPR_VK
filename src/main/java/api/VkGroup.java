@@ -8,6 +8,7 @@ import org.testng.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
+import static api.utils.VkUtils.getId;
 import static io.restassured.RestAssured.given;
 
 public class VkGroup {
@@ -27,7 +28,7 @@ public class VkGroup {
 
     public void leaveGroup() {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param(GROUP_ID, getGroupId(groupResponse))
+                .param(GROUP_ID, getId(groupResponse))
                 .get(EndPoints.LEAVE_GROUP.endPoint);
         response.then().statusCode(200);
         Assert.assertEquals(JsonPath.from(response.asString()).getInt("response."), 1, "Судя по ответу сервера, группа не покинута");
@@ -35,7 +36,7 @@ public class VkGroup {
 
     public void createTopic(String title, String text) {
         topicResponse = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param(GROUP_ID, getGroupId(groupResponse))
+                .param(GROUP_ID, getId(groupResponse))
                 .param("title", title)
                 .param("text", text)
                 .get(EndPoints.CREATE_TOPIC.endPoint);
@@ -44,7 +45,7 @@ public class VkGroup {
 
     public void fixTopic() {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param(GROUP_ID, getGroupId(groupResponse))
+                .param(GROUP_ID, getId(groupResponse))
                 .param(TOPIC_ID, getTopicId(topicResponse))
                 .get(EndPoints.FIX_TOPIC.endPoint);
         response.then().statusCode(200);
@@ -53,7 +54,7 @@ public class VkGroup {
 
     public void createComment(String text) {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param(GROUP_ID, getGroupId(groupResponse))
+                .param(GROUP_ID, getId(groupResponse))
                 .param(TOPIC_ID, getTopicId(topicResponse))
                 .param("message", text)
                 .get(EndPoints.CREATE_COMMENT.endPoint);
@@ -63,7 +64,7 @@ public class VkGroup {
 
     public void editComment(int number, String newText) {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param(GROUP_ID, getGroupId(groupResponse))
+                .param(GROUP_ID, getId(groupResponse))
                 .param(TOPIC_ID, getTopicId(topicResponse))
                 .param("comment_id", commentIds.get(number - 1))
                 .param("message", newText)
@@ -74,7 +75,7 @@ public class VkGroup {
 
     public void deleteComment(int commentNum) {
         Response response = given().spec(RequestSpecUtil.getSpecification()).log().all()
-                .param(GROUP_ID, getGroupId(groupResponse))
+                .param(GROUP_ID, getId(groupResponse))
                 .param(TOPIC_ID, getTopicId(topicResponse))
                 .param("comment_id", commentIds.get(commentNum - 1))
                 .get(EndPoints.DELETE_COMMENT.endPoint);
@@ -82,9 +83,7 @@ public class VkGroup {
         Assert.assertEquals(JsonPath.from(response.asString()).getInt("response."), 1, "Судя по ответу сервера, коммент не удалился");
     }
 
-    public Integer getGroupId(Response response) {
-        return JsonPath.from(response.asString()).getInt("response.id");
-    }
+
 
     public Integer getTopicId(Response response) {
         return JsonPath.from(response.asString()).getInt("response.");
