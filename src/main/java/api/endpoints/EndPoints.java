@@ -1,4 +1,4 @@
-package api;
+package api.endpoints;
 
 public enum EndPoints {
 

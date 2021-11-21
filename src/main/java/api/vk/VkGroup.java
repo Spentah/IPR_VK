@@ -1,5 +1,6 @@
-package api;
+package api.vk;
 
+import api.endpoints.EndPoints;
 import api.utils.RequestSpecUtil;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;

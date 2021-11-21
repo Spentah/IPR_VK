@@ -20,7 +20,7 @@ public class RequestSpecUtil {
         specification = new RequestSpecBuilder()
                 .setBaseUri("https://api.vk.com/method/")
 //                .addPathParam("{METHOD}", method)
-                .addQueryParam("access_token", System.getProperty("token"))
+                .addQueryParam("access_token", DatabaseExecutor.extract("token"))
                 .addQueryParam("v", System.getProperty("api_version"))
                 .setAccept(ContentType.JSON)
                 .setContentType(ContentType.JSON)

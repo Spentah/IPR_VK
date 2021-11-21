@@ -1,5 +1,6 @@
 package api;
 
+import api.vk.*;
 import io.qameta.allure.Step;
 
 import java.util.ArrayList;

@@ -1,5 +1,6 @@
-package api;
+package api.vk;
 
+import api.endpoints.EndPoints;
 import api.profile_info.ProfileInfo;
 import api.utils.RequestSpecUtil;
 import api.utils.VkUtils;

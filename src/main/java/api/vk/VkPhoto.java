@@ -1,5 +1,6 @@
-package api;
+package api.vk;
 
+import api.endpoints.EndPoints;
 import api.utils.RequestSpecUtil;
 import api.utils.VkUtils;
 import io.restassured.path.json.JsonPath;
@@ -14,7 +15,6 @@ import static io.restassured.RestAssured.given;
 
 public class VkPhoto {
 
-//    private Response albumResponse;
     private int uploadedPhotoId;
     private final String ALBUM_ID = "album_id";
     private final String PHOTO_ID = "photo_id";
