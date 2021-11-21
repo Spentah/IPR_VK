@@ -25,7 +25,13 @@ public enum EndPoints {
     DELETE_COMMENT("board.deleteComment"),
     CREATE_ALBUM("photos.createAlbum"),
     PHOTO_GET_UPLOAD_SERVER("photos.getUploadServer"),
-    SAVE_PHOTO("photos.save");
+    SAVE_PHOTO("photos.save"),
+    MAKE_COVER_PHOTO("photos.makeCover"),
+    CREATE_COMMENT_ON_PHOTO("photos.createComment"),
+    PUT_TAG("photos.putTag"),
+    MOVE_PHOTO("photos.move"),
+    DELETE_ALBUM("photos.deleteAlbum"),
+    DELETE_PHOTO("photos.delete");
 
     public final String endPoint;
 

@@ -2,6 +2,9 @@ package api;
 
 import io.qameta.allure.Step;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VkApi {
 
     private VkProfile profile = new VkProfile();
@@ -9,6 +12,7 @@ public class VkApi {
     private VkNewsFeed newsFeed = new VkNewsFeed();
     private VkGroup group = new VkGroup();
     private VkPhoto photo = new VkPhoto();
+    private List<Integer> albumIds = new ArrayList<>();
 
     @Step("Получаем информацию о профиле")
     public VkApi getProfileInfo() {
@@ -117,15 +121,52 @@ public class VkApi {
         return this;
     }
 
-    @Step("Создаем приватный альбом с названием '{title}'")
-    public VkApi createAlbum(String title) {
-        photo.createAlbum(title);
+    @Step("Создаем альбом с названием '{title}' и приватностью '{privacy}'")
+    public VkApi createAlbum(String title, String privacy) {
+        albumIds.add(photo.createAlbum(title, privacy));
         return this;
     }
 
+    @Step("Загружаем в альбом фото '{filePath}'")
     public VkApi uploadPhoto(String filePath) {
-        photo.saveUploadedPhoto(filePath);
+        photo.saveUploadedPhoto(filePath, albumIds.get(0));
         return this;
     }
+
+    @Step("Делаем загруженную фотографию обложкой альбома")
+    public VkApi makeCover() {
+        photo.makeCover(albumIds.get(0));
+        return this;
+    }
+
+    @Step("Добавляем к фото комментарий '{text}'")
+    public VkApi createCommentOnPhoto(String text) {
+        photo.createComment(text);
+        return this;
+    }
+
+    @Step("Отмечаем на фото юзера с айди '{userId}'")
+    public VkApi putTag(int userId) {
+        photo.putTag(userId);
+        return this;
+    }
+
+    @Step("Переносим фотографию в новый альбом")
+    public VkApi movePhoto() {
+        photo.movePhoto(albumIds.get(1));
+        return this;
+    }
+
+    @Step("Удаляем альбом под номером '{number}'")
+    public VkApi deleteAlbum(int number) {
+        photo.deleteAlbum(albumIds.get(number - 1));
+        return this;
+    }
+
+    public VkApi deletePhoto() {
+        photo.deletePhoto();
+        return this;
+    }
+
 
 }
